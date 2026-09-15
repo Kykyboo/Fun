@@ -3,250 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>System Access</title>
+<title>Terminal</title>
 
 <style>
-* {
-  box-sizing: border-box;
+html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    background: #000;
+    color: #00ff41;
+    font-family: "Courier New", monospace;
+    overflow: hidden;
 }
 
 body {
-  margin: 0;
-  background: #000;
-  color: #00ff66;
-  font-family: "Courier New", monospace;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    padding: 18px;
+    box-sizing: border-box;
+    font-size: 15px;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0,255,100,.03) 0px,
-    rgba(0,255,100,.03) 1px,
-    transparent 1px,
-    transparent 4px
-  );
-  pointer-events: none;
+#terminal {
+    white-space: pre-wrap;
+    line-height: 1.45;
 }
 
-.terminal {
-  width: min(900px, 92vw);
-  min-height: 430px;
-  border: 1px solid #00ff66;
-  box-shadow: 0 0 30px rgba(0,255,100,.25);
-  padding: 25px;
-  background: rgba(0,0,0,.92);
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 17px;
+    background: #00ff41;
+    vertical-align: -3px;
+    animation: blink .7s infinite;
 }
 
-.header {
-  border-bottom: 1px solid #00ff66;
-  padding-bottom: 12px;
-  margin-bottom: 20px;
+#hackScreen {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #000;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
 }
 
-.dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background: #00ff66;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #00ff66;
-  margin-right: 8px;
+#hackScreen h1 {
+    margin: 0;
+    color: #ff2020;
+    font-family: Arial, sans-serif;
+    font-size: clamp(55px, 13vw, 180px);
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-shadow:
+        0 0 10px #ff2020,
+        0 0 30px #ff2020,
+        0 0 70px #ff2020;
+    animation: glitch .12s infinite;
 }
 
-#output {
-  line-height: 1.7;
-  font-size: 16px;
+#hackScreen p {
+    color: white;
+    font-size: 22px;
+    margin-top: 25px;
 }
 
-.progress {
-  width: 100%;
-  height: 18px;
-  border: 1px solid #00ff66;
-  margin: 20px 0;
-}
-
-#bar {
-  height: 100%;
-  width: 0%;
-  background: #00ff66;
-  box-shadow: 0 0 15px #00ff66;
-  transition: width .15s;
-}
-
-#final {
-  display: none;
-  text-align: center;
-  margin-top: 25px;
-}
-
-#final h1 {
-  font-size: clamp(35px, 8vw, 80px);
-  margin: 10px 0;
-  text-shadow: 0 0 20px #00ff66;
-  animation: glitch .15s infinite;
-}
-
-.warning {
-  color: #fff;
-  font-size: 14px;
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
 }
 
 @keyframes glitch {
-  0% {
-    transform: translate(0);
-  }
+    0% {
+        transform: translate(0);
+    }
 
-  50% {
-    transform: translate(2px, -1px);
-  }
+    25% {
+        transform: translate(5px, -3px);
+    }
 
-  100% {
-    transform: translate(-2px, 1px);
-  }
+    50% {
+        transform: translate(-5px, 3px);
+    }
+
+    75% {
+        transform: translate(3px, 1px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="terminal">
+<div id="terminal"></div>
 
-  <div class="header">
-    <span class="dot"></span>
-    KYAN // SYSTEM TERMINAL
-  </div>
-
-  <div id="output"></div>
-
-  <div class="progress">
-    <div id="bar"></div>
-  </div>
-
-  <div id="final">
+<div id="hackScreen">
     <h1>YOU'RE HACKED</h1>
-
     <p>Hacked By Kyan</p>
-
-    <p id="visit"></p>
-
-    <p class="warning">
-      EDUCATIEVE SIMULATIE — GEEN GEGEVENS VERZAMELD
-    </p>
-  </div>
-
 </div>
 
+<audio id="hackSound" src="hacked.mp3" preload="auto"></audio>
+
 <script>
-const output = document.getElementById("output");
-const bar = document.getElementById("bar");
-const final = document.getElementById("final");
-const visit = document.getElementById("visit");
+
+const terminal = document.getElementById("terminal");
+const hackScreen = document.getElementById("hackScreen");
+const sound = document.getElementById("hackSound");
 
 const lines = [
-  "Initializing system...",
-  "Checking security modules...",
-  "Scanning local environment...",
-  "Bypassing firewall... [SIMULATION]",
-  "Loading encrypted modules...",
-  "Access granted.",
-  "Gegevens worden Opgeslagen...",
-  "Locatie: ergens in Nederland",
-  "IP: 192.0.2.123",
-  "Finalizing..."
+    "C:\\Users\\User> initialize.exe",
+    "",
+    "Initializing system...",
+    "Loading security modules...",
+    "Establishing secure connection...",
+    "Connection established.",
+    "",
+    "C:\\Users\\User> scan --network",
+    "Scanning network interface...",
+    "Interface detected.",
+    "Analyzing connection...",
+    "Connection verified.",
+    "",
+    "C:\\Users\\User> security --check",
+    "Checking security status...",
+    "Firewall detected.",
+    "Analyzing protection layers...",
+    "Processing...",
+    "",
+    "C:\\Users\\User> access --root",
+    "Authenticating...",
+    "Authentication accepted.",
+    "Access level: ROOT",
+    "",
+    "C:\\Users\\User> scan --system",
+    "Scanning system...",
+    "Loading system data...",
+    "Analyzing files...",
+    "Processing encrypted data...",
+    "Decrypting...",
+    "Complete.",
+    "",
+    "C:\\Users\\User> execute",
+    "Executing...",
+    "████████████████████████████████ 100%",
+    "",
+    "Access granted.",
+    "Connection secured."
 ];
 
-let index = 0;
-let progress = 0;
+let line = 0;
+let character = 0;
 
-function typeLine(text) {
-  output.innerHTML += "> " + text + "<br>";
+function type() {
+
+    if (line >= lines.length) {
+        finish();
+        return;
+    }
+
+    const text = lines[line];
+
+    if (character < text.length) {
+
+        terminal.textContent += text[character];
+
+        character++;
+
+        setTimeout(type, 12);
+
+    } else {
+
+        terminal.textContent += "\n";
+
+        line++;
+        character = 0;
+
+        setTimeout(type, 180);
+    }
 }
 
-function beep() {
-  const AudioContext =
-    window.AudioContext || window.webkitAudioContext;
+function finish() {
 
-  if (!AudioContext) return;
+    hackScreen.style.display = "flex";
 
-  const context = new AudioContext();
-  const oscillator = context.createOscillator();
-  const gain = context.createGain();
+    sound.currentTime = 0;
 
-  oscillator.type = "square";
-  oscillator.frequency.value = 180;
-
-  gain.gain.setValueAtTime(0.001, context.currentTime);
-  gain.gain.exponentialRampToValueAtTime(
-    0.12,
-    context.currentTime + 0.02
-  );
-
-  gain.gain.exponentialRampToValueAtTime(
-    0.001,
-    context.currentTime + 0.5
-  );
-
-  oscillator.connect(gain);
-  gain.connect(context.destination);
-
-  oscillator.start();
-  oscillator.stop(context.currentTime + 0.5);
+    sound.play().catch(() => {
+        console.log("Browser blokkeerde automatisch geluid.");
+    });
 }
 
-const alreadyVisited =
-  localStorage.getItem("kyan_demo_visited") === "true";
+type();
 
-function runScan() {
-
-  if (index < lines.length) {
-
-    typeLine(lines[index]);
-
-    index++;
-
-    progress += 100 / lines.length;
-
-    bar.style.width = progress + "%";
-
-    setTimeout(runScan, 450);
-
-  } else {
-
-    setTimeout(() => {
-
-      final.style.display = "block";
-
-      if (alreadyVisited) {
-
-        visit.textContent =
-          "Deze browser heeft deze simulatie al eerder geopend.";
-
-      } else {
-
-        visit.textContent =
-          "Eerste bezoek aan deze simulatie op deze browser.";
-
-        localStorage.setItem(
-          "kyan_demo_visited",
-          "true"
-        );
-      }
-
-      beep();
-
-    }, 700);
-  }
-}
-
-runScan();
 </script>
 
 </body>
