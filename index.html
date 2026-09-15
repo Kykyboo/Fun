@@ -1,1 +1,253 @@
-<!DOCTYPE html> <html lang="nl"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>System Access</title> <style> * { box-sizing: border-box; } body { margin: 0; background: #000; color: #00ff66; font-family: "Courier New", monospace; height: 100vh; overflow: hidden; display: flex; align-items: center; justify-content: center; } body::before { content: ""; position: fixed; inset: 0; background: repeating-linear-gradient( 0deg, rgba(0,255,100,.03) 0px, rgba(0,255,100,.03) 1px, transparent 1px, transparent 4px ); pointer-events: none; } .terminal { width: min(900px, 92vw); min-height: 430px; border: 1px solid #00ff66; box-shadow: 0 0 30px rgba(0,255,100,.25); padding: 25px; background: rgba(0,0,0,.9); } .header { border-bottom: 1px solid #00ff66; padding-bottom: 12px; margin-bottom: 20px; } .dot { display: inline-block; width: 10px; height: 10px; background: #00ff66; border-radius: 50%; box-shadow: 0 0 10px #00ff66; margin-right: 8px; } #output { line-height: 1.7; font-size: 16px; } .progress { width: 100%; height: 18px; border: 1px solid #00ff66; margin: 20px 0; } #bar { height: 100%; width: 0%; background: #00ff66; box-shadow: 0 0 15px #00ff66; transition: width .15s; } #final { display: none; text-align: center; margin-top: 25px; } #final h1 { font-size: clamp(35px, 8vw, 80px); margin: 10px 0; text-shadow: 0 0 20px #00ff66; animation: glitch .15s infinite; } .warning { color: #fff; font-size: 14px; } @keyframes glitch { 0% { transform: translate(0); } 50% { transform: translate(2px,-1px); } 100% { transform: translate(-2px,1px); } } </style> </head> <body> <div class="terminal"> <div class="header"> <span class="dot"></span> KYAN // SYSTEM TERMINAL </div> <div id="output"></div> <div class="progress"> <div id="bar"></div> </div> <div id="final"> <h1>YOU'RE HACKED</h1> <p>Hacked By Kyan</p> <p id="visit"></p> <p class="warning"> EDUCATIEVE SIMULATIE — GEEN GEGEVENS VERZAMELD </p> </div> </div> <script> const output = document.getElementById("output"); const bar = document.getElementById("bar"); const final = document.getElementById("final"); const visit = document.getElementById("visit"); const lines = [ "Initializing system...", "Checking security modules...", "Scanning local environment...", "Bypassing firewall... [SIMULATION]", "Loading encrypted modules...", "Access granted.", "Gegevens worden Opgeslagen...", "Locatie: ergens in Nederland", "IP: 192.0.2.123", "Finalizing..." ]; let i = 0; let progress = 0; function typeLine(text) { output.innerHTML += "> " + text + "<br>"; } function beep() { const AudioContext = window.AudioContext || window.webkitAudioContext; if (!AudioContext) return; const ctx = new AudioContext(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.type = "square"; osc.frequency.value = 180; gain.gain.setValueAtTime(0.001, ctx.currentTime); gain.gain.exponentialRampToValueAtTime(.12, ctx.currentTime + .02); gain.gain.exponentialRampToValueAtTime(.001, ctx.currentTime + .5); osc.connect(gain); gain.connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + .5); } const alreadyVisited = localStorage.getItem("kyan_demo_visited") === "true"; function run() { if (i < lines.length) { typeLine(lines[i]); i++; progress += 100 / lines.length; bar.style.width = progress + "%"; setTimeout(run, 450); } else { setTimeout(() => { final.style.display = "block"; if (alreadyVisited) { visit.textContent = "Deze browser heeft deze simulatie al eerder geopend."; } else { visit.textContent = "Eerste bezoek aan deze simulatie op deze browser."; localStorage.setItem("kyan_demo_visited", "true"); } beep(); }, 700); } } run(); </script> </body> </html>
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Access</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #000;
+  color: #00ff66;
+  font-family: "Courier New", monospace;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0,255,100,.03) 0px,
+    rgba(0,255,100,.03) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  pointer-events: none;
+}
+
+.terminal {
+  width: min(900px, 92vw);
+  min-height: 430px;
+  border: 1px solid #00ff66;
+  box-shadow: 0 0 30px rgba(0,255,100,.25);
+  padding: 25px;
+  background: rgba(0,0,0,.92);
+}
+
+.header {
+  border-bottom: 1px solid #00ff66;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+}
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background: #00ff66;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00ff66;
+  margin-right: 8px;
+}
+
+#output {
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+.progress {
+  width: 100%;
+  height: 18px;
+  border: 1px solid #00ff66;
+  margin: 20px 0;
+}
+
+#bar {
+  height: 100%;
+  width: 0%;
+  background: #00ff66;
+  box-shadow: 0 0 15px #00ff66;
+  transition: width .15s;
+}
+
+#final {
+  display: none;
+  text-align: center;
+  margin-top: 25px;
+}
+
+#final h1 {
+  font-size: clamp(35px, 8vw, 80px);
+  margin: 10px 0;
+  text-shadow: 0 0 20px #00ff66;
+  animation: glitch .15s infinite;
+}
+
+.warning {
+  color: #fff;
+  font-size: 14px;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+
+  50% {
+    transform: translate(2px, -1px);
+  }
+
+  100% {
+    transform: translate(-2px, 1px);
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="terminal">
+
+  <div class="header">
+    <span class="dot"></span>
+    KYAN // SYSTEM TERMINAL
+  </div>
+
+  <div id="output"></div>
+
+  <div class="progress">
+    <div id="bar"></div>
+  </div>
+
+  <div id="final">
+    <h1>YOU'RE HACKED</h1>
+
+    <p>Hacked By Kyan</p>
+
+    <p id="visit"></p>
+
+    <p class="warning">
+      EDUCATIEVE SIMULATIE — GEEN GEGEVENS VERZAMELD
+    </p>
+  </div>
+
+</div>
+
+<script>
+const output = document.getElementById("output");
+const bar = document.getElementById("bar");
+const final = document.getElementById("final");
+const visit = document.getElementById("visit");
+
+const lines = [
+  "Initializing system...",
+  "Checking security modules...",
+  "Scanning local environment...",
+  "Bypassing firewall... [SIMULATION]",
+  "Loading encrypted modules...",
+  "Access granted.",
+  "Gegevens worden Opgeslagen...",
+  "Locatie: ergens in Nederland",
+  "IP: 192.0.2.123",
+  "Finalizing..."
+];
+
+let index = 0;
+let progress = 0;
+
+function typeLine(text) {
+  output.innerHTML += "> " + text + "<br>";
+}
+
+function beep() {
+  const AudioContext =
+    window.AudioContext || window.webkitAudioContext;
+
+  if (!AudioContext) return;
+
+  const context = new AudioContext();
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+
+  oscillator.type = "square";
+  oscillator.frequency.value = 180;
+
+  gain.gain.setValueAtTime(0.001, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(
+    0.12,
+    context.currentTime + 0.02
+  );
+
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    context.currentTime + 0.5
+  );
+
+  oscillator.connect(gain);
+  gain.connect(context.destination);
+
+  oscillator.start();
+  oscillator.stop(context.currentTime + 0.5);
+}
+
+const alreadyVisited =
+  localStorage.getItem("kyan_demo_visited") === "true";
+
+function runScan() {
+
+  if (index < lines.length) {
+
+    typeLine(lines[index]);
+
+    index++;
+
+    progress += 100 / lines.length;
+
+    bar.style.width = progress + "%";
+
+    setTimeout(runScan, 450);
+
+  } else {
+
+    setTimeout(() => {
+
+      final.style.display = "block";
+
+      if (alreadyVisited) {
+
+        visit.textContent =
+          "Deze browser heeft deze simulatie al eerder geopend.";
+
+      } else {
+
+        visit.textContent =
+          "Eerste bezoek aan deze simulatie op deze browser.";
+
+        localStorage.setItem(
+          "kyan_demo_visited",
+          "true"
+        );
+      }
+
+      beep();
+
+    }, 700);
+  }
+}
+
+runScan();
+</script>
+
+</body>
+</html>
