@@ -1,0 +1,51 @@
+```html
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Systeemcontrole</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #00ff00;
+      font-family: monospace;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      text-align: center;
+    }
+
+    .screen {
+      font-size: 24px;
+    }
+
+    #message {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="screen">
+    <div id="loading">Systeemcontrole gestart...</div>
+
+    <div id="message">
+      <p>Gegevens worden Opgeslagen</p>
+      <p>Hacked By Kyan</p>
+      <p>Je woont ergens in Nederland</p>
+    </div>
+  </div>
+
+  <script>
+    setTimeout(() => {
+      document.getElementById("loading").style.display = "none";
+      document.getElementById("message").style.display = "block";
+    }, 2000);
+  </script>
+
+</body>
+</html>
+```
